@@ -59,8 +59,8 @@ if __name__ == "__main__":
     preprocessed_test_data = prcs.encode_variables(cleaned_test_data)
 
     preprocessed_train_data = prcs.encode_catagorical_columns(
-                                    preprocessed_train_data, CATEGORICAL_ENCODE
-                                )
+        preprocessed_train_data, CATEGORICAL_ENCODE
+    )
     preprocessed_test_data = prcs.encode_catagorical_columns(
-                                preprocessed_test_data, CATEGORICAL_ENCODE
-                            )
+        preprocessed_test_data, CATEGORICAL_ENCODE
+    )
