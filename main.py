@@ -29,7 +29,7 @@ ORDINAL_COLS = [
                 "SaleCondition", "RoofStyle", "RoofMatl"
             ]
 
-CATEGORICAL_ENCODE = ['Street', 'BldgType', 'SaleType', 'CentralAir']
+CATEGORICAL_ENCODE = ["Street", "BldgType", "SaleType", "CentralAir"]
 
 if __name__ == "__main__":
     # read train and test data from data folder
@@ -44,15 +44,11 @@ if __name__ == "__main__":
 
     # clean NA values from categorical variables
     cleaned_train_data = cln.custom_fill_na_values(
-                                data_train,
-                                FILL_CATEGORICAL,
-                                "No"
-                            )
+        data_train, FILL_CATEGORICAL, "No"
+    )
     cleaned_test_data = cln.custom_fill_na_values(
-                                data_test,
-                                FILL_CATEGORICAL,
-                                "No"
-                            )
+        data_test, FILL_CATEGORICAL, "No"
+    )
 
     # impute NA vales from numerical variables
     cleaned_train_data = cln.fill_all_na_values(cleaned_train_data)
