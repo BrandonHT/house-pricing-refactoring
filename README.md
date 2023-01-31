@@ -10,7 +10,7 @@ All the scripts were developed using `Python 3.9.13` as programming language, an
 
 ## How to get the data
 
-The data is available for free under the `data` tab of the [Kaggle competition](https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques/data).
+The data and its dictionary is available for free under the `data` tab of the [Kaggle competition](https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques/data).
 
 ## Repository structure
 
