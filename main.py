@@ -1,31 +1,34 @@
-"""
-    This module blah blah blah
+"""Main module with pipeline implemented
+
+This script performs all the op
+
 """
 import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import cross_val_score
 
 from src import cleaning as cln
+from src import eda
 from src import preprocessing as prcs
 
 COLS_TO_DROP = [
-                "Id", "Alley", "PoolQC", "MiscFeature", "Fence", "MoSold",
-                "YrSold", "MSSubClass", "GarageType", "GarageArea",
-                "GarageYrBlt", "GarageFinish", "YearRemodAdd", "LandSlope",
-                "BsmtUnfSF", "BsmtExposure", "2ndFlrSF", "LowQualFinSF",
+                "Id", "Alley", "PoolQC", "MiscFeature", "Fence",
+                "MoSold", "YrSold", "MSSubClass", "GarageType",
+                "GarageArea", "GarageYrBlt", "GarageFinish",
+                "YearRemodAdd", "LandSlope", "BsmtUnfSF",
+                "BsmtExposure", "2ndFlrSF", "LowQualFinSF",
                 "Condition1", "Condition2", "Heating", "Exterior1st",
-                "Exterior2nd", "HouseStyle", "LotShape", "LandContour",
-                "LotConfig", "Functional", "BsmtFinSF1", "BsmtFinSF2",
-                "FireplaceQu", "WoodDeckSF", "GarageQual", "GarageCond",
-                "OverallCond"
+                "Exterior2nd", "HouseStyle", "LotShape",
+                "LandContour", "LotConfig", "Functional", "BsmtFinSF1",
+                "BsmtFinSF2", "FireplaceQu", "WoodDeckSF", "GarageQual",
+                "GarageCond", "OverallCond"
            ]
 
 ORDINAL_COLS = [
                 "BsmtQual", "BsmtCond", "ExterQual", "ExterCond",
-                "KitchenQual", "PavedDrive", "Electrical", "BsmtFinType1",
-                "BsmtFinType2",
-                "Utilities", "MSZoning", "Foundation", "Neighborhood",
-                "MasVnrType",
+                "KitchenQual", "PavedDrive", "Electrical",
+                "BsmtFinType1", "BsmtFinType2", "Utilities",
+                "MSZoning", "Foundation", "Neighborhood", "MasVnrType",
                 "SaleCondition", "RoofStyle", "RoofMatl"
             ]
 
@@ -34,14 +37,14 @@ FILL_CATEGORICAL = ["BsmtQual", "BsmtCond", "BsmtFinType1", "BsmtFinType2"]
 CATEGORICAL_ENCODE = ["Street", "BldgType", "SaleType", "CentralAir"]
 
 NOT_OUTPUT_VARIABLES = [
-                        'OverallQual', 'ExterCond', 'ExterQual', 'BsmtCond',
-                        'BsmtQual', 'BsmtFinType1', 'BsmtFinType2',
-                        'HeatingQC', 'OpenPorchSF', 'EnclosedPorch',
-                        '3SsnPorch', 'ScreenPorch', 'BsmtFullBath',
-                        'BsmtHalfBath', 'FullBath', 'HalfBath'
+                        "OverallQual", "ExterCond", "ExterQual", "BsmtCond",
+                        "BsmtQual", "BsmtFinType1", "BsmtFinType2",
+                        "HeatingQC", "OpenPorchSF", "EnclosedPorch",
+                        "3SsnPorch", "ScreenPorch", "BsmtFullBath",
+                        "BsmtHalfBath", "FullBath", "HalfBath"
                     ]
 
-GOAL_VARIABLE = 'SalePrice'
+GOAL_VARIABLE = "SalePrice"
 
 CANDIDATE_MAX_LEAF_NODES = 250
 
@@ -53,7 +56,7 @@ def pipeline(data: pd.DataFrame):
         data (pd.DataFrame): the dataframe to be processed.
 
     Returns:
-        final_data (pd.DataFrame): a datagrame with no 'NA' values and
+        final_data (pd.DataFrame): a datagrame with no "NA" values and
         columns encoded.
     """
     aux_data = data.copy()
@@ -75,7 +78,7 @@ def generate_submissions(
             model: RandomForestRegressor,
             data: pd.DataFrame
         ):
-    """ Generate a new dataset with the predictions generated from the
+    """Generate a new dataset with the predictions generated from the
         dataframe given.
 
     Args:
@@ -95,10 +98,13 @@ def generate_submissions(
     submission.to_csv("results/submission.csv", index=False)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     data_train = pd.read_csv("data/train.csv")
     data_test = pd.read_csv("data/test.csv")
-    output_ids = data_test['Id']
+    output_ids = data_test["Id"]
+
+    eda.heatmap_of_nulls(data_train)
+    eda.collage_of_plots(data_train)
 
     final_data_train = pipeline(data_train)
     final_data_test = pipeline(data_test)
