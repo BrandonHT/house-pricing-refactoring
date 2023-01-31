@@ -11,5 +11,10 @@ The repo is organized by single purpose folders as follows:
 - **data**: should contain all the _.csv_ files to be used in the execution of the code (train.csv and test.csv).
 - **images:** stores the resulting plots after executing the EDA functions over the train dataset. 
 - **msc**: contains a single _JSON_ file with the column' names and their encoding levels. 
+- **results:** created with the objective of storing the resulting predictions using the trained model.  
 - **src:** is composed by 3 core Python scrips:
-  - **cleaning.py**
+  - **cleaning.py:** contains the functions related to fill and impute NA values based on the needs of the problem. 
+  - **eda.py:** contains the functions to perform a single EDA and store the resulting plots. 
+  - **preprocessing.py:** contains the functions to generate the encoding of the variables and to create pre-defined interactions.
+
+## Main file
