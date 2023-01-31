@@ -23,7 +23,8 @@ def __encode_variable(
         column of the dataframe given.
 
     Returns:
-        pandas.core.series.Series: the column encoded with the categories given.
+        pandas.core.series.Series: the column encoded with the
+        using the categories given.
     """
     ordinal_encoder = OrdinalEncoder(categories=[categories])
     return ordinal_encoder.fit_transform(data[[column_name]])
@@ -46,7 +47,6 @@ def encode_variables(data: DataFrame):
             data_encoded[column] = __encode_variable(
                 data=data_encoded, column_name=column, categories=categories
             )
-            print(type(data_encoded[column]))
         encoders_json.close()
     return data_encoded
 
@@ -59,8 +59,8 @@ def encode_catagorical_columns(data: DataFrame, columns: List[str]):
         columns (List[str]): the list of the desired columns to encode.
 
     Returns:
-        data (DataFrame): the resulting DataFrame after encoding the 
-        given variables. 
+        data (DataFrame): the resulting DataFrame after encoding the
+        given variables.
     """
     data_encoded = data.copy()
     label_encoder = LabelEncoder()
@@ -75,11 +75,12 @@ def create_interactions(data: DataFrame):
     """Generates predefined interactions between variables on a given dataframe.
 
     Args:
-        data (DataFrame): the dataframe on which the interactions will be created.
+        data (DataFrame): the base dataframe on which the interactions will
+        be created.
 
     Returns:
-        data_interactions: the resulting dataframe with the columns created from the
-        predefined interactions.
+        data_interactions: the resulting dataframe with the columns created
+        from the predefined interactions.
     """
     data_interactions = data.copy()
     # multiply columns
