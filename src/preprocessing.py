@@ -14,6 +14,8 @@ read external data, and scikit-learn to perform the encoding process.
 
 This script can also be imported as a module.
 """
+
+# importing needed libraries
 import json
 from typing import List
 
@@ -39,6 +41,7 @@ def __encode_variable(
         pandas.core.series.Series: the column encoded with the
         using the categories given.
     """
+    # encode the column given with the levels proposed
     ordinal_encoder = OrdinalEncoder(categories=[categories])
     return ordinal_encoder.fit_transform(data[[column_name]])
 
@@ -54,6 +57,8 @@ def encode_variables(data: DataFrame):
         the variables using the map_encoders.json file.
     """
     data_encoded = data.copy()
+    # read the map_encoders.json file and use its content to encode the
+    # variables present in the file.
     with open("msc/map_encoders.json", encoding="utf-8") as encoders_json:
         encoders = json.load(encoders_json)
         for column, categories in encoders.items():
@@ -77,6 +82,7 @@ def encode_catagorical_columns(data: DataFrame, columns: List[str]):
     """
     data_encoded = data.copy()
     label_encoder = LabelEncoder()
+    # for each of the columns given, perform the encoding
     for column in columns:
         data_encoded[column] = label_encoder.fit_transform(
             data_encoded[column]

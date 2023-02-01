@@ -2,22 +2,26 @@
 
 This script performs all the operations related to the pipeline for
 the data. The pipeline implements all the operations present in each
-Python file under the src folder. 
+Python file under the src folder.
 
 It uses pandas and scikit-learn libraries for data manipulation
-and creation of machine learning models. 
+and creation of machine learning models.
 
 To execute this Python script just open a terminal and type the command:
 python main.py.
 """
+
+# importing needed libraries
 import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import cross_val_score
 
+# importing needed modules
 from src import cleaning as cln
 from src import eda
 from src import preprocessing as prcs
 
+# defining predefined set of variables for data manipulation
 COLS_TO_DROP = [
                 "Id", "Alley", "PoolQC", "MiscFeature", "Fence",
                 "MoSold", "YrSold", "MSSubClass", "GarageType",
@@ -53,6 +57,7 @@ NOT_OUTPUT_VARIABLES = [
 
 GOAL_VARIABLE = "SalePrice"
 
+# max number of leaf nodes for the random forest model
 CANDIDATE_MAX_LEAF_NODES = 250
 
 
@@ -67,16 +72,23 @@ def pipeline(data: pd.DataFrame):
         columns encoded.
     """
     aux_data = data.copy()
+    # dropping variables that are not going to be used in the analysis
+    # or predictions
     data_filtered = aux_data.drop(COLS_TO_DROP, axis=1)
+    # fill NA values for custom variables with an specific value.
     data_cleaned = cln.custom_fill_na_values(
         data_filtered, FILL_CATEGORICAL, "No"
     )
+    # fill all NA values
     data_cleaned = cln.fill_all_na_values(data_cleaned)
+    # performs the encoding of some categorical variables
     preprocessed_data = prcs.encode_variables(data_cleaned)
     preprocessed_data = prcs.encode_catagorical_columns(
         preprocessed_data, CATEGORICAL_ENCODE
     )
+    # create the interactions between variables
     preprocessed_data = prcs.create_interactions(preprocessed_data)
+    # drop variables that are not going to be used for the predictions.
     final_data = preprocessed_data.drop(NOT_OUTPUT_VARIABLES, axis=1)
     return final_data
 
@@ -98,7 +110,9 @@ def generate_submissions(
     Output:
         a csv file with the predictions indexed by the ids given.
     """
+    # generate predictions using a given model
     price = model.predict(data)
+    # create the predictions dataset using the ids to index each entry
     submission = pd.DataFrame({
         "Id": ids,
         "SalePrice": price
@@ -107,21 +121,24 @@ def generate_submissions(
 
 
 if __name__ == "__main__":
+    # read train and test data
     data_train = pd.read_csv("data/train.csv")
     data_test = pd.read_csv("data/test.csv")
+    # separate the ids to index each entry
     output_ids = data_test["Id"]
-
+    # generate the plots from the EDA analysis
     eda.heatmap_of_nulls(data_train)
     eda.collage_of_plots(data_train)
-
+    # execute the pipeline operations over each dataset
     final_data_train = pipeline(data_train)
     final_data_test = pipeline(data_test)
-
-    # random forest model
+    # define the input and output variables
     y = final_data_train[GOAL_VARIABLE]
     X = final_data_train.drop(GOAL_VARIABLE, axis=1)
+    # create a Random forest regressor model, train it and evalute it
     rf_model = RandomForestRegressor(max_leaf_nodes=CANDIDATE_MAX_LEAF_NODES)
     rf_model.fit(X, y)
     score = cross_val_score(rf_model, X, y, cv=10)
     print(score)
+    # generate a new file with the predictions of the test dataset
     generate_submissions(output_ids, rf_model, final_data_test)
