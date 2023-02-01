@@ -31,7 +31,7 @@ def heatmap_of_nulls(data: pd.DataFrame):
     # create a space for the plot
     fig, axis = plt.subplots(figsize=(25, 10))
     # generate the heatmap and save it
-    sns.heatmap(data=data.isnull(), yticklabels=False, axis=axis)
+    sns.heatmap(data=data.isnull(), yticklabels=False, ax=axis)
     fig.savefig("images/heatmap_of_nulls.png")
 
 
@@ -48,10 +48,10 @@ def collage_of_plots(data: pd.DataFrame):
     fig, axis = plt.subplots(figsize=(25, 10))
     # generate several plots of specific variables of the dataset
     sns.countplot(x=data['SaleCondition'])
-    sns.histplot(x=data['SaleType'], kde=True, axis=axis)
-    sns.violinplot(x=data['HouseStyle'], y=data['SalePrice'], axis=axis)
+    sns.histplot(x=data['SaleType'], kde=True, ax=axis)
+    sns.violinplot(x=data['HouseStyle'], y=data['SalePrice'], ax=axis)
     sns.scatterplot(x=data["Foundation"], y=data["SalePrice"],
-                    palette='deep', axis=axis)
+                    palette='deep', ax=axis)
     # integrate all plots in a single image and save it
     plt.grid()
     fig.savefig("images/collage_of_plots.png")
