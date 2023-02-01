@@ -30,7 +30,7 @@ In addition to those folders, a `main.py` file is located at the root of the rep
 ## Steps
 
 1) The train and test datasets are being read, also the _Ids_ are obtained and stored in an independent variable.
-2) A couple of plots are generated from the EDA process and are stored into the `images` folder. The first one is a heatmap of null values, which represents the presence or absence of the values for one or more variables in each register of the train dataset.
+2) A couple of plots are generated from the EDA process and are stored into the `images` folder. The first one is a heatmap of null values, which represents the presence or absence of values for one or more variables in each register of the train dataset. The second one is a mix of plots to make explicit the dispersion and distribution of the values for some variables. 
 3) A pipeline is executed for each dataset. The pipeline is composed by:
         3.1) Drop the unwanted columns.
         3.2) Fill the _'NA'_ values of specific desired variables using a custom value.
