@@ -1,7 +1,14 @@
 """Main module with pipeline implemented
 
-This script performs all the op
+This script performs all the operations related to the pipeline for
+the data. The pipeline implements all the operations present in each
+Python file under the src folder. 
 
+It uses pandas and scikit-learn libraries for data manipulation
+and creation of machine learning models. 
+
+To execute this Python script just open a terminal and type the command:
+python main.py.
 """
 import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
@@ -69,6 +76,7 @@ def pipeline(data: pd.DataFrame):
     preprocessed_data = prcs.encode_catagorical_columns(
         preprocessed_data, CATEGORICAL_ENCODE
     )
+    preprocessed_data = prcs.create_interactions(preprocessed_data)
     final_data = preprocessed_data.drop(NOT_OUTPUT_VARIABLES, axis=1)
     return final_data
 
@@ -115,4 +123,5 @@ if __name__ == "__main__":
     rf_model = RandomForestRegressor(max_leaf_nodes=CANDIDATE_MAX_LEAF_NODES)
     rf_model.fit(X, y)
     score = cross_val_score(rf_model, X, y, cv=10)
+    print(score)
     generate_submissions(output_ids, rf_model, final_data_test)

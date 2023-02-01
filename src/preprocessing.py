@@ -1,5 +1,18 @@
-"""
-    Hola
+"""Data preprocesser
+
+This script allows the user to encode variables of a given dataframe
+using a predefined set of variables and levels with the Ordinal encoder
+operation. Also allows the user to encode a set of desired categorical
+variables with the Label encoder operation.
+
+In addition to those functions, this scripts implements a predefined
+interations between variables, allowing the user to generate
+new variables from the original in the dataset given.
+
+It uses the following libraries: pandas for data manipulation, json to
+read external data, and scikit-learn to perform the encoding process.
+
+This script can also be imported as a module.
 """
 import json
 from typing import List

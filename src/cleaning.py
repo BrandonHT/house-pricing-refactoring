@@ -1,5 +1,13 @@
-"""
-    Hola
+"""Dataset cleaner
+
+This script allows the user to fill NA values by two functions.
+The first one allows to fill NA values from desired variables using
+an specific value. The second one fills all NA values on a given
+datafram based on the data type of each column. Both functions
+receives a dataframe as parameter and uses the pandas library for
+data manipulation.
+
+This script can also be imported as a module.
 """
 from typing import Any, List
 
