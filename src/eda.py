@@ -18,12 +18,13 @@ import pandas as pd
 import seaborn as sns
 
 
-def heatmap_of_nulls(data: pd.DataFrame):
-    """Create a heatmap with the NA values for each variable of a
-        given dataframe.
+def heatmap_of_nulls(data: pd.DataFrame, path_to_save: str):
+    """Create a heatmap with the NA values for each variable of a given dataframe.
 
     Args:
         data (pd.DataFrame): a dataset to be analysed.
+        path_to_save (str): the relative path where the plot is going to
+        be saved.
 
     Output:
         an image with the plot generated.
@@ -32,14 +33,16 @@ def heatmap_of_nulls(data: pd.DataFrame):
     fig, axis = plt.subplots(figsize=(25, 10))
     # generate the heatmap and save it
     sns.heatmap(data=data.isnull(), yticklabels=False, ax=axis)
-    fig.savefig("images/heatmap_of_nulls.png")
+    fig.savefig(path_to_save)
 
 
-def collage_of_plots(data: pd.DataFrame):
+def collage_of_plots(data: pd.DataFrame, path_to_save: str):
     """Create a mix of plots for specific variables from a dataset given.
 
     Args:
         data (pd.DataFrame): a dataset to be analysed.
+        path_to_save (str): the relative path where the plot is going to
+        be saved.
 
     Output:
         an image with the mix of plots generated.
@@ -54,4 +57,4 @@ def collage_of_plots(data: pd.DataFrame):
                     palette='deep', ax=axis)
     # integrate all plots in a single image and save it
     plt.grid()
-    fig.savefig("images/collage_of_plots.png")
+    fig.savefig(path_to_save)
