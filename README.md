@@ -16,8 +16,10 @@ The data and its dictionary is available for free under the `data` tab of the [K
 
 The repo is organized by single purpose folders as follows:
 
-- `data`: should contain all the _.csv_ files to be used in the execution of the code (train.csv and test.csv).
-- `images:` stores the resulting plots after executing the EDA functions over the train dataset. 
+- `config:` is related to basic configs to use execute the main code. A **config-sample.ini** file was added to take it as an example of the content that the actual **config.ini** file should have. 
+- `data:` should contain all the _.csv_ files to be used in the execution of the code (train.csv and test.csv).
+- `images:` stores the resulting plots after executing the EDA functions over the train dataset.
+- `logs:` stores the logs and messages of the current execution of the code. 
 - `msc`: contains a single _JSON_ file with the column' names and their encoding levels. 
 - `results:` created with the objective of storing the resulting predictions using the trained model.  
 - `src:` is composed by 3 core Python scrips:
