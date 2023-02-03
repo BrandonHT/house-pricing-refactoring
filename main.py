@@ -11,6 +11,7 @@ To execute this Python script just open a terminal and type the command:
 python main.py.
 """
 # importing needed libraries
+import logging
 from statistics import mean
 
 import pandas as pd
@@ -63,6 +64,21 @@ GOAL_VARIABLE = "SalePrice"
 
 # max number of leaf nodes for the random forest model
 CANDIDATE_MAX_LEAF_NODES = 250
+
+
+def init_logging():
+    """Initialize the basic configuration parameters to save the log messages
+        in a external log file.
+    """
+    try:
+        logging.basicConfig(
+                            filename='logs/logs.log',
+                            level=logging.INFO,
+                            filemode='w',
+                            format='%(name)s - %(levelname)s - %(message)s'
+                        )
+    except RuntimeError:
+        logging.error("Logging could not start")
 
 
 def pipeline(data: pd.DataFrame):
@@ -128,30 +144,47 @@ def generate_submissions(
 
 
 if __name__ == "__main__":
+    init_logging()
     config_values = config.ConfigValues()
     # read train and test data
-    data_train = pd.read_csv(config_values.path_train())
-    data_test = pd.read_csv(config_values.path_test())
-    # separate the ids to index each entry
-    output_ids = data_test["Id"]
-    # generate the plots from EDA analysis
-    eda.heatmap_of_nulls(data_train, config_values.path_heatmap())
-    eda.collage_of_plots(data_train, config_values.path_collage())
-    # execute the pipeline operations over each dataset
-    final_data_train = pipeline(data_train)
-    final_data_test = pipeline(data_test)
-    # define the input and output variables
-    y = final_data_train[GOAL_VARIABLE]
-    X = final_data_train.drop(GOAL_VARIABLE, axis=1)
-    # create a Random forest regressor model, train it and evalute it
-    rf_model = RandomForestRegressor(max_leaf_nodes=CANDIDATE_MAX_LEAF_NODES)
-    rf_model.fit(X, y)
-    score = cross_val_score(rf_model, X, y, cv=10)
-    print(mean(score))
-    # generate a new file with the predictions of the test dataset
-    generate_submissions(
-                        output_ids,
-                        rf_model,
-                        final_data_test,
-                        config_values.path_submissions()
-                    )
+    data_train = pd.DataFrame()
+    data_test = pd.DataFrame()
+    try:
+        data_train = pd.read_csv(config_values.path_train())
+        data_test = pd.read_csv(config_values.path_test())
+    except FileNotFoundError:
+        data_train, data_test = None, None
+        logging.error("The path for train or test dataset is wrong.")
+    if not (data_train.empty and data_test.empty):
+        # separate the ids to index each entry
+        output_ids = data_test["Id"]
+        # generate the plots from EDA analysis
+        try:
+            eda.heatmap_of_nulls(data_train, config_values.path_heatmap())
+            eda.collage_of_plots(data_train, config_values.path_collage())
+        except FileNotFoundError:
+            logging.error("The path to save one or both plots is wrong.")
+        # execute the pipeline operations over each dataset
+        final_data_train = pipeline(data_train)
+        final_data_test = pipeline(data_test)
+        # define the input and output variables
+        y = final_data_train[GOAL_VARIABLE]
+        X = final_data_train.drop(GOAL_VARIABLE, axis=1)
+        # create a Random forest regressor model, train it and evalute it
+        rf_model = RandomForestRegressor(
+                                        max_leaf_nodes=CANDIDATE_MAX_LEAF_NODES
+                                    )
+        rf_model.fit(X, y)
+        score = cross_val_score(rf_model, X, y, cv=10)
+        logging.info('The mean score of 10 folds in '
+                     'cross validation is: %s', mean(score))
+        # generate a new file with the predictions of the test dataset
+        try:
+            generate_submissions(
+                                output_ids,
+                                rf_model,
+                                final_data_test,
+                                config_values.path_submissions()
+                            )
+        except OSError:
+            logging.error("The path to save the submissions is wrong.")
