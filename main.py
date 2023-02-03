@@ -10,11 +10,15 @@ and creation of machine learning models.
 To execute this Python script just open a terminal and type the command:
 python main.py.
 """
-
 # importing needed libraries
+from statistics import mean
+
 import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import cross_val_score
+
+# importing needed classes
+from config import config
 
 # importing needed modules
 from src import cleaning as cln
@@ -96,7 +100,8 @@ def pipeline(data: pd.DataFrame):
 def generate_submissions(
             ids: pd.core.series.Series,
             model: RandomForestRegressor,
-            data: pd.DataFrame
+            data: pd.DataFrame,
+            path_to_save: str
         ):
     """Generate a new dataset with the predictions generated from the
         dataframe given.
@@ -106,6 +111,8 @@ def generate_submissions(
         model (RandomForestRegressor): a pretrained random forest model.
         data (pd.DataFrame): the dataset which will be used to generate
         the predictions.
+        path_to_save (str): the relative path where the results are going
+        to be saved.
 
     Output:
         a csv file with the predictions indexed by the ids given.
@@ -117,18 +124,19 @@ def generate_submissions(
         "Id": ids,
         "SalePrice": price
     })
-    submission.to_csv("results/submission.csv", index=False)
+    submission.to_csv(path_to_save, index=False)
 
 
 if __name__ == "__main__":
+    config_values = config.ConfigValues()
     # read train and test data
-    data_train = pd.read_csv("data/train.csv")
-    data_test = pd.read_csv("data/test.csv")
+    data_train = pd.read_csv(config_values.path_train())
+    data_test = pd.read_csv(config_values.path_test())
     # separate the ids to index each entry
     output_ids = data_test["Id"]
-    # generate the plots from the EDA analysis
-    eda.heatmap_of_nulls(data_train)
-    eda.collage_of_plots(data_train)
+    # generate the plots from EDA analysis
+    eda.heatmap_of_nulls(data_train, config_values.path_heatmap())
+    eda.collage_of_plots(data_train, config_values.path_collage())
     # execute the pipeline operations over each dataset
     final_data_train = pipeline(data_train)
     final_data_test = pipeline(data_test)
@@ -139,6 +147,11 @@ if __name__ == "__main__":
     rf_model = RandomForestRegressor(max_leaf_nodes=CANDIDATE_MAX_LEAF_NODES)
     rf_model.fit(X, y)
     score = cross_val_score(rf_model, X, y, cv=10)
-    print(score)
+    print(mean(score))
     # generate a new file with the predictions of the test dataset
-    generate_submissions(output_ids, rf_model, final_data_test)
+    generate_submissions(
+                        output_ids,
+                        rf_model,
+                        final_data_test,
+                        config_values.path_submissions()
+                    )
