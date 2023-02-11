@@ -65,13 +65,15 @@ def encode_variables(data: DataFrame):
             encoders = json.load(encoders_json)
             for column, categories in encoders.items():
                 data_encoded[column] = __encode_variable(
-                    data=data_encoded, column_name=column, categories=categories
-                )
+                                                        data=data_encoded,
+                                                        column_name=column,
+                                                        categories=categories
+                                                    )
             encoders_json.close()
         return data_encoded
-    except FileNotFoundError as fnfe:
+    except FileNotFoundError:
         logging.error("The file with the encoding values was not found.")
-
+        return None
 
 
 def encode_catagorical_columns(data: DataFrame, columns: List[str]):
