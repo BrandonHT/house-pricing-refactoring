@@ -11,6 +11,7 @@ To execute this Python script just open a terminal and type the command:
 python main.py.
 """
 # importing needed libraries
+import argparse
 import logging
 from statistics import mean
 
@@ -18,13 +19,20 @@ import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import cross_val_score
 
-# importing needed classes
+# importing needed classes and modules
 from config import config
-
-# importing needed modules
 from src import cleaning as cln
 from src import eda
 from src import preprocessing as prcs
+
+# an argument parser was included to manage the number of max leaf nodes
+# of the random forest
+parser = argparse.ArgumentParser(
+    prog="main", 
+    usage="whoa, use: %(prog)s [options] number",
+    description="number of max leaf nodes of a random forest")
+
+parser.add_argument('max_leaf', type=int)
 
 # defining predefined set of variables for data manipulation
 COLS_TO_DROP = [
@@ -61,9 +69,6 @@ NOT_OUTPUT_VARIABLES = [
                     ]
 
 GOAL_VARIABLE = "SalePrice"
-
-# max number of leaf nodes for the random forest model
-CANDIDATE_MAX_LEAF_NODES = 250
 
 
 def init_logging():
@@ -144,6 +149,8 @@ def generate_submissions(
 
 
 if __name__ == "__main__":
+    # retrieving the arguments from the execution
+    args = parser.parse_args()
     init_logging()
     config_values = config.ConfigValues()
     # read train and test data
@@ -171,8 +178,9 @@ if __name__ == "__main__":
         y = final_data_train[GOAL_VARIABLE]
         X = final_data_train.drop(GOAL_VARIABLE, axis=1)
         # create a Random forest regressor model, train it and evalute it
+        max_leaf_nodes = args.max_leaf
         rf_model = RandomForestRegressor(
-                                        max_leaf_nodes=CANDIDATE_MAX_LEAF_NODES
+                                        max_leaf_nodes=max_leaf_nodes
                                     )
         rf_model.fit(X, y)
         score = cross_val_score(rf_model, X, y, cv=10)
