@@ -17,6 +17,7 @@ This script can also be imported as a module.
 
 # importing needed libraries
 import json
+import logging
 from typing import List
 
 from pandas import DataFrame
@@ -59,14 +60,18 @@ def encode_variables(data: DataFrame):
     data_encoded = data.copy()
     # read the map_encoders.json file and use its content to encode the
     # variables present in the file.
-    with open("msc/map_encoders.json", encoding="utf-8") as encoders_json:
-        encoders = json.load(encoders_json)
-        for column, categories in encoders.items():
-            data_encoded[column] = __encode_variable(
-                data=data_encoded, column_name=column, categories=categories
-            )
-        encoders_json.close()
-    return data_encoded
+    try:
+        with open("msc/map_encoders.json", encoding="utf-8") as encoders_json:
+            encoders = json.load(encoders_json)
+            for column, categories in encoders.items():
+                data_encoded[column] = __encode_variable(
+                    data=data_encoded, column_name=column, categories=categories
+                )
+            encoders_json.close()
+        return data_encoded
+    except FileNotFoundError as fnfe:
+        logging.error("The file with the encoding values was not found.")
+
 
 
 def encode_catagorical_columns(data: DataFrame, columns: List[str]):
