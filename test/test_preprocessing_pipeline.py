@@ -1,13 +1,9 @@
 """Data preprocessing and pipeline testing
 
-This script test all the functions related to the EDA process of the code.
-Some fixtures were defined in order to return the paths associated to each
-plot that will be generated when testing them.
-
-The output of the tests will be stored under the *test_results* folder.
-
-One last test function was included in order to remove all the content of
-the *test_results* folder once the previuos tests were evaluated.
+This script test all the functions used during the pipeline of preprocessing
+of the data. A fixture was defined in order to return the path associated to the
+source dataset. Also some functions requiered in the pipeline process
+were created.
 """
 
 import logging
