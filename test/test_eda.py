@@ -96,3 +96,21 @@ def test_collage(data_path, collage_path):
     except FileNotFoundError as fnfe_res:
         logging.error("Collage of plots was not generated.")
         raise fnfe_res
+
+
+def test_remove_results(heatmap_path, collage_path):
+    """Remove all the results generated from the other test functions
+
+    Args:
+        heatmap_path (str): the path where the heatmap plot is located.
+        collage_path (str): the path where the collage of plots is located.
+
+    Raises:
+        fnfe: FileNotFoundError if some of the plots were not removed.
+    """
+    try:
+        os.remove(heatmap_path)
+        os.remove(collage_path)
+    except FileNotFoundError as fnfe:
+        logging.error("Some of the plots could not be removed.")
+        raise fnfe
