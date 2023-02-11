@@ -76,7 +76,7 @@ def encode_variables(data: DataFrame):
         return None
 
 
-def encode_catagorical_columns(data: DataFrame, columns: List[str]):
+def encode_categorical_columns(data: DataFrame, columns: List[str]):
     """Encode given categorical variables using a label encoder.
 
     Args:

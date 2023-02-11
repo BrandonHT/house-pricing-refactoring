@@ -103,7 +103,7 @@ def pipeline(data: pd.DataFrame):
     data_cleaned = cln.fill_all_na_values(data_cleaned)
     # performs the encoding of some categorical variables
     preprocessed_data = prcs.encode_variables(data_cleaned)
-    preprocessed_data = prcs.encode_catagorical_columns(
+    preprocessed_data = prcs.encode_categorical_columns(
         preprocessed_data, CATEGORICAL_ENCODE
     )
     # create the interactions between variables
