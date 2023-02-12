@@ -26,14 +26,21 @@ The repo is organized by single purpose folders as follows:
   - `cleaning.py:` contains the functions related to fill and impute NA values based on the needs of the problem. 
   - `eda.py:` contains the functions to perform a single EDA and store the resulting plots. 
   - `preprocessing.py:` contains the functions to generate the encoding of the variables and to create pre-defined interactions.
+- `test:` contains the modules used to test each function of the modules defined under the *src* folder.
 
 In addition to those folders, a `main.py` file is located at the root of the repository. This file contains all the steps (described below) that will be executed, from taking the data to generate the plots and the final predictions. 
 
+## How to execute the process
+
+By using the command `python main.py <num_max_leaf_nodes>` from terminal you could be able to execute the process and generate the plots and the predictions under the respective folders. The `<num_max_leaf_nodes>` argument is required for the training process of the random forest model. An example of how to execute the code is as follows: `python main.py 250`.
+
 ## Steps
 
-1) The train and test datasets are being read, also the _Ids_ are obtained and stored in an independent variable.
-2) A couple of plots are generated from the EDA process and are stored into the `images` folder. The first one is a heatmap of null values, which represents the presence or absence of values for one or more variables in each register of the train dataset. The second one is a mix of plots to make explicit the dispersion and distribution of the values for some variables. 
-3) A pipeline is executed for each dataset. The pipeline is composed by:
+1) The `num_max_leaf_nodes` argument is retrieved and the logging basic configuration is loaded.
+2) The config values are loaded from the `config.ini` file by using the `ConfigValues` class.
+3) The train and test datasets are being read, also the _Ids_ are obtained and stored in an independent variable.
+4) A couple of plots are generated from the EDA process and are stored into the `images` folder. The first one is a heatmap of null values, which represents the presence or absence of values for one or more variables in each register of the train dataset. The second one is a mix of plots to make explicit the dispersion and distribution of the values for some variables. 
+5) A pipeline is executed for each dataset. The pipeline is composed by:
         3.1) Drop the unwanted columns.
         3.2) Fill the _'NA'_ values of specific desired variables using a custom value.
         3.3) Fill the _'NA'_ values of the rest of the variables based on the type of each variable: numerical or categorical.
@@ -41,11 +48,7 @@ In addition to those folders, a `main.py` file is located at the root of the rep
         3.5) Encode a predefined set of categorical variables using the `Label encoder` operation.
         3.6) Create a predefined set of variables by interactions between existing variables. 
         3.7) Drop the variables that are not used for the final prediction.
-4) Set the input and output variables to perform the training process and the predictions.
-5) Create a `Random Forest Regressor` model and train it using the train dataset and the input and output variables.
-6) Calculate a list of average scores for the model by using the `cross validation` method.
-7) Finally, calculate the predictions for the test dataset and save them into the `results` folder.
-
-## How to execute the process
-
-By using the command `python main.py` you could be able to execute the process and generate the plots and the predictions under the respective folders. 
+6) Set the input and output variables to perform the training process and the predictions.
+7) Create a `Random Forest Regressor` model and train it using the train dataset and the input and output variables.
+8) Calculate a list of average scores for the model by using the `cross validation` method.
+9) Finally, calculate the predictions for the test dataset and save them into the `results` folder.
