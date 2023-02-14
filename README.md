@@ -8,7 +8,7 @@ This repository was created to manage a couple of assignments of the *Large scal
 
 All the scripts were developed using `Python 3.9.13` as programming language, and the following libraries: `pandas` and `numpy` for data manipulation, `json` for reading external data, `seaborn` and `matplotlib` for data visualization, `scikit-learn` for data processing and machine learning models, `typing` for data type handling, `pylint` and `flake8` for PEP8 style code formatting, and `pytest` for testing of functions and modules.
 
-To reproduce the environment described above, an `environments.yaml` file was created at the root of the project to use with `conda`. The following command should be executed in order to create the `house-pricing` conda environment:
+To reproduce the environment described above, an `environments.yaml` file was created at the root of the project to use with `conda`. The following command should be executed in order to re-create the `house-pricing` conda environment:
 
 `conda env create --file environments.yaml`
 
