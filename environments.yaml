@@ -1,0 +1,15 @@
+# environments.yml
+name: house-pricing
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9.13
+  - scikit-learn
+  - pandas
+  - numpy
+  - pytest
+  - ipython
+  - matplotlib
+  - seaborn
+  - pylint
