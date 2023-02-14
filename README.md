@@ -4,9 +4,16 @@
 
 This repository was created to manage a couple of assignments of the *Large scale methods* course of the M. Sc. Data science at ITAM. The main goal was the refactoring and improvement of a single Jupyter notebook found under the competence [Kaggle house price prediction](https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques). While the refactoring stands for creating Python modules and functions, the improvements were the application of the programming best practices and recommendations following the [PEP8](https://peps.python.org/pep-0008/) style guide. Also the migration of the code to production style was considered under the activities of improving the structure of the code. 
 
-## Required dependencies
+## Dependencies and conda environment
 
-All the scripts were developed using `Python 3.9.13` as programming language, and the following libraries: `pandas` for data manipulation, `json` for reading external data, `seaborn` and `matplotlib` for data visualization, `scikit-learn` for data processing and machine learning models, and `typing` for data type handling. 
+All the scripts were developed using `Python 3.9.13` as programming language, and the following libraries: `pandas` and `numpy` for data manipulation, `json` for reading external data, `seaborn` and `matplotlib` for data visualization, `scikit-learn` for data processing and machine learning models, `typing` for data type handling, `pylint` and `flake8` for PEP8 style code formatting, and `pytest` for testing of functions and modules.
+
+To reproduce the environment described above, an `environments.yaml` file was created at the root of the project to use with `conda`. The following command should be executed in order to create the `house-pricing` conda environment:
+
+`conda env create --file environments.yaml`
+
+
+
 
 ## How to get the data
 
