@@ -32,7 +32,7 @@ The `app` folder contains all the code and required configurations to execute th
   - `preprocessing.py:` contains the functions to generate the encoding of the variables and to create pre-defined interactions.
 - `test:` contains the modules used to test each function of the modules defined under the *src* folder.
 
-In addition to those folders, a `main.py` file is located at the root of the repository. This file contains all the steps (described below) that will be executed, from taking the data to generate the plots and the final predictions. 
+In addition to those folders, a `main.py` file is located under the app folder. This file contains all the steps (described below) that will be executed, from taking the data to generate the plots and the final predictions. 
 
 ## How to execute the process
 
