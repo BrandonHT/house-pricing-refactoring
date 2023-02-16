@@ -106,15 +106,19 @@ def pipeline(data: pd.DataFrame):
     )
     # fill all NA values
     data_cleaned = cln.fill_all_na_values(data_cleaned)
+    logging.info("NA values removed.")
     # performs the encoding of some categorical variables
     preprocessed_data = prcs.encode_variables(data_cleaned)
     preprocessed_data = prcs.encode_categorical_columns(
         preprocessed_data, CATEGORICAL_ENCODE
     )
+    logging.info("Encoding process finished.")
     # create the interactions between variables
     preprocessed_data = prcs.create_interactions(preprocessed_data)
+    logging.info("Interactions created successfully.")
     # drop variables that are not going to be used for the predictions.
     final_data = preprocessed_data.drop(NOT_OUTPUT_VARIABLES, axis=1)
+    logging.info("Pipeline finished.")
     return final_data
 
 
@@ -159,6 +163,7 @@ if __name__ == "__main__":
     try:
         data_train = pd.read_csv(config_values.path_train())
         data_test = pd.read_csv(config_values.path_test())
+        logging.info("Train and test datasets have been read succesfully.")
     except FileNotFoundError:
         data_train, data_test = None, None
         logging.error("The path for train or test dataset is wrong.")
@@ -168,20 +173,26 @@ if __name__ == "__main__":
         # generate the plots from EDA analysis
         try:
             eda.heatmap_of_nulls(data_train, config_values.path_heatmap())
+            logging.info("Heatmap has been created succesfully.")
             eda.collage_of_plots(data_train, config_values.path_collage())
+            logging.info("Collage of plots has been created succesfully.")
         except FileNotFoundError:
             logging.error("The path to save one or both plots is wrong.")
         # execute the pipeline operations over each dataset
+        logging.info("Executing pipeline for train dataset.")
         final_data_train = pipeline(data_train)
+        logging.info("Executing pipeline for test dataset.")
         final_data_test = pipeline(data_test)
         # define the input and output variables
         y = final_data_train[GOAL_VARIABLE]
         X = final_data_train.drop(GOAL_VARIABLE, axis=1)
         # create a Random forest regressor model, train it and evalute it
+        logging.info("Creating Random Forest model...")
         max_leaf_nodes = args.max_leaf
         rf_model = RandomForestRegressor(
                                         max_leaf_nodes=max_leaf_nodes
                                     )
+        logging.info("Training Random Forest...")
         rf_model.fit(X, y)
         score = cross_val_score(rf_model, X, y, cv=10)
         logging.info('The mean score of 10 folds in '
@@ -194,5 +205,6 @@ if __name__ == "__main__":
                                 final_data_test,
                                 config_values.path_submissions()
                             )
+            logging.info("Submissions file has been created successfully.")
         except OSError:
             logging.error("The path to save the submissions is wrong.")
