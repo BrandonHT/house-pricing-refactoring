@@ -12,16 +12,13 @@ To reproduce the environment described above, an `environments.yaml` file was cr
 
 `conda env create --file environments.yaml`
 
-
-
-
 ## How to get the data
 
-The data and its dictionary is available for free under the `data` tab of the [Kaggle competition](https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques/data).
+The data and its dictionary is available for free under the `app` tab of the [Kaggle competition](https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques/data).
 
 ## Repository structure
 
-The repo is organized by single purpose folders as follows:
+The `app` folder contains all the code and required configurations to execute the application. Under this folder there are several single purpose folders ordered as follows:
 
 - `config:` is related to basic configs to use execute the main code. A **config-sample.ini** file was added to take it as an example of the content that the actual **config.ini** file should have. 
 - `data:` should contain all the _.csv_ files to be used in the execution of the code (train.csv and test.csv).
@@ -59,3 +56,17 @@ By using the command `python main.py <num_max_leaf_nodes>` from terminal you cou
 7) Create a `Random Forest Regressor` model and train it using the train dataset and the input and output variables.
 8) Calculate a list of average scores for the model by using the `cross validation` method.
 9) Finally, calculate the predictions for the test dataset and save them into the `results` folder.
+
+# Run by using Docker
+
+Two Dockerfiles were created to execute the application on a single Docker container. If you want to deploy the application in a separate container, the `Dockerfile` file should be used. If you want to deploy the application mounting the disk, the `Dockerfile.mount` file should be used. 
+
+No matter what option you choose to deploy the application, the Dockerfile to use has to be named as `Dockerfile`, and should be the only one file with this name, so be careful when renaming the Dockerfile that you don't want to use.
+
+The commands to deploy the application in a separate container are the following: 
+1. `docker build -t house-pricing .` (this command will compile the Docker image and will be named as *house_pricing*).
+2. `docker run -it --rm house-pricing` (this command will run the application on a separate container and will remove it when the code finished).
+
+The commands to deploy the application mounting the disk are the following: 
+1. `docker build -t house-pricing .` (this command will compile the Docker image and will be named as *house_pricing*).
+2. `docker run -it --rm -v <absolute>/<path>/<to>/<repo>/house-pricing-refactoring/app:/app house-pricing` (this command will run the application by mounting the disk to execute the code and will remove it when the code finished).
